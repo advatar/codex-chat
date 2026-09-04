@@ -152,6 +152,25 @@ public struct CodexChatDesktopScene: Scene {
     }
 }
 
+/// The complete CodexChat workspace as an embeddable SwiftUI surface.
+///
+/// Hosts can place this view inside their own navigation hierarchy while
+/// CodexChat continues to own its runtime, persistence, approvals, and safety
+/// controls. The embedded surface intentionally shares the same bootstrap and
+/// teardown behavior as the standalone desktop scene.
+public struct CodexChatEmbeddedView: View {
+    @StateObject private var model: AppModel
+
+    public init() {
+        _model = StateObject(wrappedValue: CodexChatBootstrap.bootstrapModel())
+    }
+
+    public var body: some View {
+        MainAppRoot(model: model)
+            .frame(minWidth: 600, minHeight: 400)
+    }
+}
+
 private struct MainAppRoot: View {
     @ObservedObject var model: AppModel
     @Environment(\.colorScheme) private var colorScheme
